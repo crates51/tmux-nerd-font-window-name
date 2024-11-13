@@ -6,7 +6,9 @@ if ! command -v yq >/dev/null 2>&1; then
 fi
 
 NAME="$1"
+APP_NAME="${NAME%% *}"
 PANES="$2"
+SHOW_NAME_OVERRIDE="$3"  # Capture the third parameter
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_CONFIG="$CURRENT_DIR/defaults.yml"
 USER_CONFIG="$HOME/.config/tmux/tmux-nerd-font-window-name.yml"
@@ -25,7 +27,7 @@ get_config_value() {
 	echo "$value"
 }
 
-ICON="$(get_config_value ".icons.\"$NAME\"")"
+ICON="$(get_config_value ".icons.\"$APP_NAME\"")"
 
 if [ "$ICON" == "null" ]; then
 	FALLBACK_ICON="$(get_config_value '.config.fallback-icon')"
@@ -39,7 +41,13 @@ if [ "$PANES" -gt 1 ]; then
 	fi
 fi
 
-SHOW_NAME="$(get_config_value '.config.show-name')"
+# Check if SHOW_NAME_OVERRIDE is "true", otherwise get from config
+if [ "$SHOW_NAME_OVERRIDE" == "false" ]; then
+	SHOW_NAME=false
+else
+	SHOW_NAME="$(get_config_value '.config.show-name')"
+fi
+
 if [ "$SHOW_NAME" = true ]; then
 	ICON_POSITION="$(get_config_value '.config.icon-position')"
 	if [ "$ICON_POSITION" == "right" ]; then
