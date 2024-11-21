@@ -41,6 +41,24 @@ if [ "$PANES" -gt 1 ]; then
 	fi
 fi
 
+# Define hex colors
+VIM_COLOR="#81a764"  # Greenish
+ZSH_COLOR="#e5c07b"  # Cyanish
+PYTHON_COLOR="#4B8BBE"  # Official Python blue
+MAKE_COLOR="#FAB387"  # Pastel orange for notebook icon
+LAZYGIT_COLOR="#F14E32"  # Bright red-orange for lazygit
+DEFAULT_COLOR="#5e81ac" # Blueish
+
+# Apply hex color to the ICON based on the app name
+case "$APP_NAME" in
+    "nvim") ICON="#[fg=$VIM_COLOR]$ICON#[fg=default]" ;;
+    "zsh") ICON="#[fg=$ZSH_COLOR]$ICON#[fg=default]" ;;
+    "python3.11") ICON="#[fg=$PYTHON_COLOR]$ICON#[fg=default]" ;; # Python icon color
+    "make") ICON="#[fg=$MAKE_COLOR]$ICON#[fg=default]" ;; # Notebook icon color
+    "lazygit") ICON="#[fg=$LAZYGIT_COLOR]$ICON#[fg=default]" ;; # LazyGit icon color
+    *) ICON="#[fg=$DEFAULT_COLOR]$ICON#[fg=default]" ;; # Default color
+esac
+
 # Check if SHOW_NAME_OVERRIDE is "true", otherwise get from config
 if [ "$SHOW_NAME_OVERRIDE" == "false" ]; then
 	SHOW_NAME=false
